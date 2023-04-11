@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 const data = window.localStorage.getItem("short_long_ratios") ? JSON.parse(window.localStorage.getItem("short_long_ratios")) : [[0, 0, 0, 0], [0, 0, 0, 0]];
-console.log(data)
 
 function toPercents(arr) {
     let total = arr.reduce((a,b) => a+b);
@@ -12,7 +11,6 @@ class Box extends THREE.Mesh {
     constructor(i, j) {
         super()
         let percents = toPercents(data[i]);
-        console.log(percents)
         this.geometry = new THREE.BoxGeometry(0, 0, 0)
         this.material = new THREE.MeshStandardMaterial({ color: new THREE.Color('green').convertSRGBToLinear() })
         let percent = percents[j] === 0 ? 0.01 : percents[j];
@@ -25,7 +23,6 @@ class Box extends THREE.Mesh {
         let percents = toPercents(data[this.i]);
         let percent = percents[this.j] === 0 ? 0.01 : percents[this.j];
         this.scale.y = percent;
-        console.log(this.scale.y)
         this.position.y = percent/2;
 
     }
@@ -52,7 +49,6 @@ class Box extends THREE.Mesh {
         else if ("button" in e)  // IE, Opera
             isRightMB = e.button == 2;
 
-        console.log(toPercents(data[this.i]))
 
         if (isRightMB) {
             data[this.i][this.j] = Math.max(0, data[this.i][this.j] - 1);
@@ -62,7 +58,6 @@ class Box extends THREE.Mesh {
 
         }
         let percents = toPercents(data[this.i]);
-        console.log(data)
         window.localStorage.setItem("short_long_ratios", JSON.stringify(data))
         this.cubeActive = !this.cubeActive
         this.geometry.y = percents[this.j] === 0 ? 0.01 : percents[this.j]
