@@ -31,14 +31,14 @@
             </form>
             <div class="flex flex-col gap-3 pl-5 min-w-[25em] max-w-[25em]">
                 <p>Initial Max Loss: {{ Number.isNaN(maxInitialLoss()) ? "-" : maxInitialLoss() }}</p>
-                <p>Initial Max Profit: {{ Number.isNaN(maxInitialProfit()) ? "-" : maxInitialProfit()  }}</p>
+                <p>Initial Max Profit: {{ Number.isNaN(maxInitialProfit()) ? "-" : maxInitialProfit() }}</p>
                 <div v-for="addon in addons">
                     <p>{{ addon.id }}.</p>
                     <div class="grid grid-cols-2 gap-2 justify-center items-end">
-                        <span>Adjusted Size: {{prettifyMoney(valuesAtIndex(addon.id)[1])}}</span>
-                        <span>Adjusted Price: {{valuesAtIndex(addon.id)[0].toFixed(5)}}</span>
-                        <span>Max Loss: {{loss(addon.id)}}</span>
-                        <span>Max Profit: {{profit(addon.id)}}</span>
+                        <span>Adjusted Size: {{ prettifyMoney(valuesAtIndex(addon.id)[1]) }}</span>
+                        <span>Adjusted Price: {{ valuesAtIndex(addon.id)[0].toFixed(5) }}</span>
+                        <span>Max Loss: {{ loss(addon.id) }}</span>
+                        <span>Max Profit: {{ profit(addon.id) }}</span>
 
                     </div>
 
@@ -97,7 +97,7 @@ export default {
             if (this.side) {
                 return this.prettifyMoney((this.initialSize / this.entry * this.stop) - this.initialSize)
             } else {
-                return this.prettifyMoney((this.initialSize / this.stop *  this.entry) - this.initialSize)
+                return this.prettifyMoney((this.initialSize / this.stop * this.entry) - this.initialSize)
 
             }
         },
@@ -106,29 +106,19 @@ export default {
             if (this.side) {
                 return this.prettifyMoney((this.initialSize / this.entry * this.target) - this.initialSize)
             } else {
-                return this.prettifyMoney((this.initialSize / this.target *  this.entry) - this.initialSize)
+                return this.prettifyMoney((this.initialSize / this.target * this.entry) - this.initialSize)
 
             }
         },
-loss(i) {
+        loss(i) {
             let [entry, size] = this.valuesAtIndex(i)
-            if (this.side) {
                 return this.prettifyMoney((size / entry * this.stop) - size)
-            } else {
-                return this.prettifyMoney((size / this.stop *  entry) - size)
-
-            }
         },
 
         profit(i) {
-                    let [entry, size] = this.valuesAtIndex(i)
+            let [entry, size] = this.valuesAtIndex(i)
 
-            if (this.side) {
                 return this.prettifyMoney((size / entry * this.target) - size)
-            } else {
-                return this.prettifyMoney((size / entry *  this.entry) - size)
-
-            }
         },
 
         valuesAtIndex(i) {
@@ -136,16 +126,16 @@ loss(i) {
                 return 0
             }
             let size = this.initialSize;
-        let price = this.entry;
+            let price = this.entry;
             for (let addon of this.addons) {
                 if (addon.id > i) {
-                break;
+                    break;
                 }
-                        price = (price * size + addon.price * addon.size) / (size + addon.size)
+                price = (price * size + addon.price * addon.size) / (size + addon.size)
 
-            size += addon.size;
+                size += addon.size;
             }
-        return [price, size]
+            return [price, size]
 
         },
         prettifyMoney(val) {
